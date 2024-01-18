@@ -1,10 +1,16 @@
 const express = require("express");
 const fs = require("fs").promises; // File system module to read JSON files
 const path = require("path");
+const cors = require("cors");
 const app = express();
 
+app.use(cors());
+
 app.get("/api/translations/:lng", async (req, res) => {
-  const { lng } = req.params;
+  let { lng } = req.params;
+  if (lng.includes("-")) {
+    lng = lng.split("-")[0];
+  }
   const filePath = path.join(__dirname, `translations/${lng}.json`);
 
   try {
